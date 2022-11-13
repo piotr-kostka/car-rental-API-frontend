@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 
-@Service
-@RequiredArgsConstructor
 public class ManufacturerService {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -33,7 +31,7 @@ public class ManufacturerService {
     }
 
     private URI getUrl() {
-        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getUsers())
+        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getManufacturers())
                 .build()
                 .encode()
                 .toUri();
@@ -63,7 +61,7 @@ public class ManufacturerService {
     }
 
     public List<Manufacturer> findManufacturer(String manufacturer) {
-        return getManufacturers().stream().filter(m -> m.getName().contains(manufacturer)).collect(Collectors.toList());
+        return getManufacturers().stream().filter(m -> m.getName().toLowerCase().contains(manufacturer)).collect(Collectors.toList());
     }
 
     public Manufacturer createManufacturer(Manufacturer manufacturer) throws IOException {
@@ -82,7 +80,7 @@ public class ManufacturerService {
     }
 
     public void deleteManufacturer(long manufacturerId) {
-        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getUsers() + "/" + manufacturerId)
+        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getManufacturers() + "/" + manufacturerId)
                 .build()
                 .encode()
                 .toUri();
