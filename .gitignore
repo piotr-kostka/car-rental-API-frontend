@@ -2,6 +2,8 @@ node_modules
 HELP.md
 .gradle
 build/
+**/out/
+**/build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -36,5 +38,3 @@ out/
 
 ### VS Code ###
 .vscode/
-**/out/
-**/build/
