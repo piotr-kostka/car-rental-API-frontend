@@ -2,8 +2,6 @@ package com.kodilla.rental_frontend.service;
 
 import com.kodilla.rental_frontend.config.BackEndConfig;
 import com.kodilla.rental_frontend.domain.Manufacturer;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -49,7 +47,7 @@ public class ManufacturerService {
     }
 
     public Manufacturer getManufacturer(long manufacturerId) {
-        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getUsers() + "/" + manufacturerId)
+        URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getManufacturers() + "/" + manufacturerId)
                 .build()
                 .encode()
                 .toUri();
