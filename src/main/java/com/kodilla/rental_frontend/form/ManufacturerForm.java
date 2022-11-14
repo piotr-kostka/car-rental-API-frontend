@@ -59,7 +59,6 @@ public class ManufacturerForm extends FormLayout {
             setVisible(false);
         } else {
             setVisible(true);
-            manufacturerName.focus();
         }
     }
 }

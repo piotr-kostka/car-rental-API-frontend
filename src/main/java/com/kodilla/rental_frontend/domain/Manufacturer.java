@@ -13,4 +13,8 @@ public class Manufacturer {
     private long manufacturerId;
     private String name;
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }
