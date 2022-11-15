@@ -20,6 +20,10 @@ public class UserView extends VerticalLayout {
     private TextField filterLastName = new TextField();
     private UserForm form = new UserForm(this);
     private Button addNewUser = new Button("Add new user");
+    private Button rentalsButton = new Button("Rentals");
+    private Button carsButton = new Button("Cars");
+    private Button modelsButton = new Button("Models");
+    private Button manufacturersButton = new Button("Manufacturers");
 
     public UserView() {
         filterFirstName.setPlaceholder("Filter by Firstname");
@@ -32,19 +36,38 @@ public class UserView extends VerticalLayout {
         filterLastName.setValueChangeMode(ValueChangeMode.EAGER);
         filterLastName.addValueChangeListener(e -> updateLastname());
 
+        rentalsButton.addClickListener(e ->
+                rentalsButton.getUI().ifPresent(ui ->
+                        ui.navigate("rentals"))
+        );
+        carsButton.addClickListener(e ->
+                carsButton.getUI().ifPresent(ui ->
+                        ui.navigate("cars"))
+        );
+        modelsButton.addClickListener(e ->
+                modelsButton.getUI().ifPresent(ui ->
+                        ui.navigate("models"))
+        );
+        manufacturersButton.addClickListener(e ->
+                manufacturersButton.getUI().ifPresent(ui ->
+                        ui.navigate("manufacturers"))
+        );
+
+
         grid.setColumns("firstName", "lastName", "pesel", "address", "mail", "password", "creditCardNo", "toPay", "signupDate");
 
         addNewUser.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setUser(new User());
         });
+        HorizontalLayout routes = new HorizontalLayout(rentalsButton, carsButton, modelsButton,manufacturersButton);
         HorizontalLayout toolbar = new HorizontalLayout(filterFirstName, filterLastName, addNewUser);
 
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();
 
-        add(toolbar, userContent);
+        add(routes, toolbar, userContent);
         form.setUser(null);
         setSizeFull();
         refresh();

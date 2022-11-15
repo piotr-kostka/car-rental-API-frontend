@@ -23,8 +23,8 @@ public class UserForm extends FormLayout {
     private TextField password = new TextField("Password");
     private TextField creditCardNo = new TextField("Credit card number");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button addUser = new Button("Add user");
+    private Button saveChanges = new Button("Save changes");
 
     private Binder<User> binder = new Binder<User>(User.class);
     private UserView userView;
@@ -32,31 +32,37 @@ public class UserForm extends FormLayout {
 
     public UserForm(UserView userView) {
         userId.setEnabled(false);
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttons = new HorizontalLayout(addUser, saveChanges);
+        addUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(firstName, lastName, pesel, address, mail, password, creditCardNo, buttons);
         binder.bindInstanceFields(this);
         this.userView = userView;
-        save.addClickListener(event -> {
+        addUser.addClickListener(event -> {
             try {
-                save();
+                addUser();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        delete.addClickListener(event -> delete());
+        saveChanges.addClickListener(event -> {
+            try {
+                saveChanges();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    private void save() throws IOException {
+    private void addUser() throws IOException {
         User user = binder.getBean();
         userService.createUser(user);
         userView.refresh();
         setUser(null);
     }
 
-    private void delete() {
+    private void saveChanges() throws IOException {
         User user = binder.getBean();
-        userService.deleteUser(user.getUserId());
+        userService.updateUser(user);
         userView.refresh();
         setUser(null);
     }

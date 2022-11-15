@@ -15,39 +15,31 @@ import java.io.IOException;
 public class ManufacturerForm extends FormLayout {
     private TextField manufacturerName = new TextField("Manufacturer name");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button update = new Button("Save changes");
 
     private Binder<Manufacturer> binder = new Binder<>(Manufacturer.class);
     private ManufacturerView manufacturerView;
     private ManufacturerService manufacturerService = ManufacturerService.getInstance();
 
     public ManufacturerForm(ManufacturerView manufacturerView) {
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttons = new HorizontalLayout(update);
+        update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(manufacturerName, buttons);
         binder.bind(manufacturerName, "name");
         this.manufacturerView = manufacturerView;
-        save.addClickListener(event -> {
+
+        update.addClickListener(event -> {
             try {
-                save();
+                saveChanges();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        delete.addClickListener(event -> delete());
     }
 
-    private void save() throws IOException {
+    private void saveChanges() throws IOException {
         Manufacturer manufacturer = binder.getBean();
         manufacturerService.createManufacturer(manufacturer);
-        manufacturerView.refresh();
-        setManufacturer(null);
-    }
-
-    private void delete() {
-        Manufacturer manufacturer = binder.getBean();
-        manufacturerService.deleteManufacturer(manufacturer.getManufacturerId());
         manufacturerView.refresh();
         setManufacturer(null);
     }

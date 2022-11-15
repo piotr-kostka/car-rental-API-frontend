@@ -25,7 +25,8 @@ public class RentalForm extends FormLayout {
     private ComboBox<Currency> currency = new ComboBox<>("Currency");
 
     private Button save = new Button("Rent a car");
-    private Button delete = new Button("Return Car");
+    private Button returnCar = new Button("Return Car");
+    private Button makePayment = new Button("Pay");
 
     private Binder<Rental> binder = new Binder<>(Rental.class);
     private RentalView rentalView;
@@ -33,7 +34,7 @@ public class RentalForm extends FormLayout {
 
     public RentalForm(RentalView rentalView) {
         ComboBox.ItemFilter<Car> filterCar = (car, filterString) -> (car.toString()).contains(filterString.toLowerCase());
-        car.setItems(filterCar, CarService.getInstance().getCars());
+        car.setItems(filterCar, CarService.getInstance().getAvailableCars());
         car.setItemLabelGenerator(Car::toString);
 
         ComboBox.ItemFilter<User> filterUser = (user, filterString) -> (user.toString()).contains(filterString.toLowerCase());
@@ -42,7 +43,7 @@ public class RentalForm extends FormLayout {
 
         currency.setItems(Currency.values());
 
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        HorizontalLayout buttons = new HorizontalLayout(save, returnCar, makePayment);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(user, car, currency, buttons);
         binder.bindInstanceFields(this);
@@ -54,11 +55,41 @@ public class RentalForm extends FormLayout {
                 e.printStackTrace();
             }
         });
+
+        returnCar.addClickListener(event -> {
+            try {
+                returnCar();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        makePayment.addClickListener(event -> {
+            try {
+                makePayment();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void save() throws IOException {
         Rental rental = binder.getBean();
         rentalService.createRental(rental);
+        rentalView.refresh();
+        setRental(null);
+    }
+
+    private void returnCar() throws IOException {
+        Rental rental = binder.getBean();
+        rentalService.returnCar(rental.getRentalId());
+        rentalView.refresh();
+        setRental(null);
+    }
+
+    private void makePayment() throws IOException {
+        Rental rental = binder.getBean();
+        rentalService.makePayment(rental.getRentalId());
         rentalView.refresh();
         setRental(null);
     }
