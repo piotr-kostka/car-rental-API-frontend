@@ -1,7 +1,6 @@
 package com.kodilla.rental_frontend.service;
 
 import com.kodilla.rental_frontend.config.BackEndConfig;
-import com.kodilla.rental_frontend.domain.Car;
 import com.kodilla.rental_frontend.domain.Rental;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -85,22 +84,24 @@ public class RentalService {
         }
     }
 
-    public void returnCar(long rentalId, Rental rental) throws IOException {
+    public void returnCar(long rentalId) throws IOException {
         URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getRentals() + "/return/" + rentalId)
                 .build()
                 .encode()
                 .toUri();
+        Rental rental = getRental(rentalId);
         try {
             restTemplate.put(url, rental);
         } catch (RestClientException e) {
         }
     }
 
-    public void makePayment(long rentalId, Rental rental) {
+    public void makePayment(long rentalId) {
         URI url = UriComponentsBuilder.fromHttpUrl(BackEndConfig.getRentals() + "/pay/" + rentalId)
                 .build()
                 .encode()
                 .toUri();
+        Rental rental = getRental(rentalId);
         try {
             restTemplate.put(url, rental);
         } catch (RestClientException e) {

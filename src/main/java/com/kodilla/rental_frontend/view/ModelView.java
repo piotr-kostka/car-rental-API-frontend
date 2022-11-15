@@ -20,6 +20,10 @@ public class ModelView extends VerticalLayout {
     private TextField filter = new TextField();
     private ModelForm form = new ModelForm(this);
     private Button addNewModel = new Button("Add new model");
+    private Button rentalsButton = new Button("Rentals");
+    private Button usersButton = new Button("Users");
+    private Button carsButton = new Button("Cars");
+    private Button manufacturersButton = new Button("Manufacturers");
 
     public ModelView() {
         filter.setPlaceholder("Filter by model");
@@ -27,19 +31,37 @@ public class ModelView extends VerticalLayout {
         filter.setValueChangeMode(ValueChangeMode.EAGER);
         filter.addValueChangeListener(e -> updateModel());
 
+        rentalsButton.addClickListener(e ->
+                rentalsButton.getUI().ifPresent(ui ->
+                        ui.navigate("rentals"))
+        );
+        usersButton.addClickListener(e ->
+                usersButton.getUI().ifPresent(ui ->
+                        ui.navigate("users"))
+        );
+        carsButton.addClickListener(e ->
+                carsButton.getUI().ifPresent(ui ->
+                        ui.navigate("cars"))
+        );
+        manufacturersButton.addClickListener(e ->
+                manufacturersButton.getUI().ifPresent(ui ->
+                        ui.navigate("manufacturers"))
+        );
+
         grid.setColumns("manufacturer", "name", "engineSize", "bodyType", "productionYear", "color", "seatsQuantity", "doorQuantity", "fuelType", "transmissionType");
 
         addNewModel.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setModel(new Model());
         });
+        HorizontalLayout routes = new HorizontalLayout(rentalsButton, usersButton, carsButton, manufacturersButton);
         HorizontalLayout toolbar = new HorizontalLayout(filter, addNewModel);
 
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();
 
-        add(toolbar, userContent);
+        add(routes, toolbar, userContent);
         form.setModel(null);
         setSizeFull();
         refresh();

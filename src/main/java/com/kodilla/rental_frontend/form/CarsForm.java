@@ -5,7 +5,7 @@ import com.kodilla.rental_frontend.domain.Model;
 import com.kodilla.rental_frontend.domain.enums.CarStatus;
 import com.kodilla.rental_frontend.service.CarService;
 import com.kodilla.rental_frontend.service.ModelService;
-import com.kodilla.rental_frontend.view.CarView;
+import com.kodilla.rental_frontend.view.CarsView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -17,52 +17,58 @@ import com.vaadin.flow.data.binder.Binder;
 
 import java.io.IOException;
 
-public class CarForm extends FormLayout {
+public class CarsForm extends FormLayout {
     private TextField carId = new TextField();
     private ComboBox<Model> model = new ComboBox<>("Model");
     private TextField licenseNumber = new TextField("License number");
     private BigDecimalField price = new BigDecimalField("Price");
     private ComboBox<CarStatus> carStatus = new ComboBox<>("Car status");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button addCar = new Button("Add car");
+    private Button saveChanges = new Button("Save changes");
 
     private Binder<Car> binder = new Binder<>(Car.class);
-    private CarView carView;
+    private CarsView carView;
     private CarService carService = CarService.getInstance();
 
-    public CarForm(CarView carView) {
+    public CarsForm(CarsView carView) {
         ComboBox.ItemFilter<Model> filter = (model, filterString) -> (model.getName()).contains(filterString.toLowerCase());
         model.setItems(filter, ModelService.getInstance().getModels());
         model.setItemLabelGenerator(Model::toString);
 
         carStatus.setItems(CarStatus.values());
 
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttons = new HorizontalLayout(addCar, saveChanges);
+        addCar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(model, licenseNumber, price, carStatus, buttons);
         binder.bindInstanceFields(this);
         this.carView = carView;
-        save.addClickListener(event -> {
+        addCar.addClickListener(event -> {
             try {
-                save();
+                addCar();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        delete.addClickListener(event -> delete());
+        saveChanges.addClickListener(event -> {
+            try {
+                saveChanges();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    private void save() throws IOException {
+    private void addCar() throws IOException {
         Car car = binder.getBean();
         carService.createCar(car);
         carView.refresh();
         setCar(null);
     }
 
-    private void delete() {
+    private void saveChanges() throws IOException {
         Car car = binder.getBean();
-        carService.deleteCar(car.getCarId());
+        carService.updateCar(car);
         carView.refresh();
         setCar(null);
     }

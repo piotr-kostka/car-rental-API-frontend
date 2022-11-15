@@ -31,8 +31,8 @@ public class ModelForm extends FormLayout {
     private ComboBox<FuelType> fuelType = new ComboBox<>("Fuel type");
     private ComboBox<TransmissionType> transmissionType = new ComboBox<>("Transmission type");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private Button addModel = new Button("Add model");
+    private Button saveChanges = new Button("Save changes");
 
     private Binder<Model> binder = new Binder<>(Model.class);
     private ModelView modelView;
@@ -47,31 +47,37 @@ public class ModelForm extends FormLayout {
         fuelType.setItems(FuelType.values());
         transmissionType.setItems(TransmissionType.values());
 
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttons = new HorizontalLayout(addModel, saveChanges);
+        addModel.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(manufacturer, name, engineSize, bodyType, productionYear, color, seatsQuantity, doorQuantity, fuelType, transmissionType, buttons);
         binder.bindInstanceFields(this);
         this.modelView = modelView;
-        save.addClickListener(event -> {
+        addModel.addClickListener(event -> {
             try {
-                save();
+                addModel();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        delete.addClickListener(event -> delete());
+        saveChanges.addClickListener(event -> {
+            try {
+                saveChanges();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    private void save() throws IOException {
+    private void addModel() throws IOException {
         Model model = binder.getBean();
         modelService.createModel(model);
         modelView.refresh();
         setModel(null);
     }
 
-    private void delete() {
+    private void saveChanges() throws IOException {
         Model model = binder.getBean();
-        modelService.deleteModel(model.getModelId());
+        modelService.updateModel(model);
         modelView.refresh();
         setModel(null);
     }

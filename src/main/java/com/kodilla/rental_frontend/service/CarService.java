@@ -3,7 +3,6 @@ package com.kodilla.rental_frontend.service;
 import com.kodilla.rental_frontend.config.BackEndConfig;
 import com.kodilla.rental_frontend.domain.Car;
 
-import com.kodilla.rental_frontend.domain.Model;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -110,6 +109,10 @@ public class CarService {
         } catch (RestClientException e) {
             return new ArrayList<>();
         }
+    }
+
+    public List<Car> findByModelName(String name) {
+        return getCars().stream().filter(m -> m.getModel().getName().contains(name)).collect(Collectors.toList());
     }
 
     public List<Car> findLicenseNumber(String licenseNumber) {
