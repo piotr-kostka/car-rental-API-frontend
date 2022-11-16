@@ -82,14 +82,18 @@ public class RentalForm extends FormLayout {
 
     private void returnCar() throws IOException {
         Rental rental = binder.getBean();
-        rentalService.returnCar(rental.getRentalId());
+        if(rental.getReturnDate() == null && rental.getPaymentDate() == null ) {
+            rentalService.returnCar(rental.getRentalId());
+        }
         rentalView.refresh();
         setRental(null);
     }
 
     private void makePayment() throws IOException {
         Rental rental = binder.getBean();
-        rentalService.makePayment(rental.getRentalId());
+        if(rental.getRentDate() != null && rental.getPaymentDate() == null) {
+            rentalService.makePayment(rental.getRentalId());
+        }
         rentalView.refresh();
         setRental(null);
     }

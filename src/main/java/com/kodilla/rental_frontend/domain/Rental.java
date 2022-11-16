@@ -16,8 +16,6 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rental {
     private long rentalId;
-    private Car car;
-    private User user;
     private LocalDate rentDate;
     private LocalDate returnDate;
     private Currency currency;
@@ -26,4 +24,6 @@ public class Rental {
     private BigDecimal leftToPay;
     private RentalStatus rentalStatus;
     private LocalDate paymentDate;
+    private Car car;
+    private User user;
 }

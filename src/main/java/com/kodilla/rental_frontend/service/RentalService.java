@@ -68,8 +68,8 @@ public class RentalService {
             return new ArrayList<>();
         }
     }
-    public List<Rental> findByUserLastName(String lastName) {
-        return getRentals().stream().filter(m -> m.getUser().getLastName().toLowerCase().contains(lastName)).collect(Collectors.toList());
+    public List<Rental> findByUser(String user) {
+        return getRentals().stream().filter(m -> m.getUser().toString().toLowerCase().contains(user)).collect(Collectors.toList());
     }
 
     public List<Rental> findByRentalId(long rentalId) {
