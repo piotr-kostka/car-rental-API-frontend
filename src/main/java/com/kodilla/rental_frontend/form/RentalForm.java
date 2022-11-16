@@ -28,9 +28,9 @@ public class RentalForm extends FormLayout {
     private Button returnCar = new Button("Return Car");
     private Button makePayment = new Button("Pay");
 
-    private Binder<Rental> binder = new Binder<>(Rental.class);
-    private RentalView rentalView;
-    private RentalService rentalService = RentalService.getInstance();
+    private final Binder<Rental> binder = new Binder<>(Rental.class);
+    private final RentalView rentalView;
+    private final RentalService rentalService = RentalService.getInstance();
 
     public RentalForm(RentalView rentalView) {
         ComboBox.ItemFilter<Car> filterCar = (car, filterString) -> (car.toString()).contains(filterString.toLowerCase());
@@ -45,9 +45,11 @@ public class RentalForm extends FormLayout {
 
         HorizontalLayout buttons = new HorizontalLayout(save, returnCar, makePayment);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         add(user, car, currency, buttons);
         binder.bindInstanceFields(this);
         this.rentalView = rentalView;
+
         save.addClickListener(event -> {
             try {
                 save();
@@ -82,25 +84,24 @@ public class RentalForm extends FormLayout {
 
     private void returnCar() throws IOException {
         Rental rental = binder.getBean();
-        rentalService.returnCar(rental.getRentalId());
+        if(rental.getReturnDate() == null && rental.getPaymentDate() == null ) {
+            rentalService.returnCar(rental.getRentalId());
+        }
         rentalView.refresh();
         setRental(null);
     }
 
     private void makePayment() throws IOException {
         Rental rental = binder.getBean();
-        rentalService.makePayment(rental.getRentalId());
+        if(rental.getRentDate() != null && rental.getPaymentDate() == null) {
+            rentalService.makePayment(rental.getRentalId());
+        }
         rentalView.refresh();
         setRental(null);
     }
 
     public void setRental(Rental rental) {
         binder.setBean(rental);
-
-        if (rental == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
+        setVisible(rental != null);
     }
 }

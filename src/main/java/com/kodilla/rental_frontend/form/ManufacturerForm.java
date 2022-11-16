@@ -17,13 +17,14 @@ public class ManufacturerForm extends FormLayout {
 
     private Button update = new Button("Save changes");
 
-    private Binder<Manufacturer> binder = new Binder<>(Manufacturer.class);
-    private ManufacturerView manufacturerView;
-    private ManufacturerService manufacturerService = ManufacturerService.getInstance();
+    private final Binder<Manufacturer> binder = new Binder<>(Manufacturer.class);
+    private final ManufacturerView manufacturerView;
+    private final ManufacturerService manufacturerService = ManufacturerService.getInstance();
 
     public ManufacturerForm(ManufacturerView manufacturerView) {
         HorizontalLayout buttons = new HorizontalLayout(update);
         update.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         add(manufacturerName, buttons);
         binder.bind(manufacturerName, "name");
         this.manufacturerView = manufacturerView;
@@ -46,11 +47,6 @@ public class ManufacturerForm extends FormLayout {
 
     public void setManufacturer(Manufacturer manufacturer) {
         binder.setBean(manufacturer);
-
-        if (manufacturer == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
+        setVisible(manufacturer != null);
     }
 }

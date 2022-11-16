@@ -26,17 +26,19 @@ public class UserForm extends FormLayout {
     private Button addUser = new Button("Add user");
     private Button saveChanges = new Button("Save changes");
 
-    private Binder<User> binder = new Binder<User>(User.class);
-    private UserView userView;
-    private UserService userService = UserService.getInstance();
+    private final Binder<User> binder = new Binder<User>(User.class);
+    private final UserView userView;
+    private final UserService userService = UserService.getInstance();
 
     public UserForm(UserView userView) {
         userId.setEnabled(false);
         HorizontalLayout buttons = new HorizontalLayout(addUser, saveChanges);
         addUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         add(firstName, lastName, pesel, address, mail, password, creditCardNo, buttons);
         binder.bindInstanceFields(this);
         this.userView = userView;
+
         addUser.addClickListener(event -> {
             try {
                 addUser();
@@ -44,6 +46,7 @@ public class UserForm extends FormLayout {
                 e.printStackTrace();
             }
         });
+
         saveChanges.addClickListener(event -> {
             try {
                 saveChanges();
@@ -70,10 +73,6 @@ public class UserForm extends FormLayout {
     public void setUser(User user) {
         binder.setBean(user);
 
-        if (user == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
+        setVisible(user != null);
     }
 }

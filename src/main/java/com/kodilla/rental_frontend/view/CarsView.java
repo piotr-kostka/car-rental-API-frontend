@@ -10,24 +10,19 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route("cars")
+@Route(value = "cars", layout = MainLayout.class)
+@PageTitle("Cars | Rent APP")
 public class CarsView extends VerticalLayout {
-    private CarService carService = CarService.getInstance();
-    private Grid<Car> grid = new Grid<>(Car.class);
-    private TextField name = new TextField();
-    private TextField filter = new TextField();
-    private BigDecimalField priceFilter = new BigDecimalField();
 
-    private CarsForm form = new CarsForm(this);
-    private Button addNewCar = new Button("Add new car");
-    private Button allCars = new Button("Show all cars");
-    private Button availableCars = new Button("Show available cars");
-    private Button rentalsButton = new Button("Rentals");
-    private Button usersButton = new Button("Users");
-    private Button modelsButton = new Button("Models");
-    private Button manufacturersButton = new Button("Manufacturers");
+    private final CarService carService = CarService.getInstance();
+    private final Grid<Car> grid = new Grid<>(Car.class);
+    private final TextField name = new TextField();
+    private final TextField filter = new TextField();
+    private final BigDecimalField priceFilter = new BigDecimalField();
+    private final CarsForm form = new CarsForm(this);
 
     public CarsView() {
         name.setPlaceholder("Filter by name");
@@ -45,40 +40,25 @@ public class CarsView extends VerticalLayout {
         priceFilter.setValueChangeMode(ValueChangeMode.EAGER);
         priceFilter.addValueChangeListener(e -> updateByPrice());
 
+        Button allCars = new Button("Show all cars");
         allCars.addClickListener(e -> grid.setItems(carService.getCars()));
+        Button availableCars = new Button("Show available cars");
         availableCars.addClickListener(e -> grid.setItems(carService.getAvailableCars()));
-
-        rentalsButton.addClickListener(e ->
-                rentalsButton.getUI().ifPresent(ui ->
-                        ui.navigate("rentals"))
-        );
-        usersButton.addClickListener(e ->
-                usersButton.getUI().ifPresent(ui ->
-                        ui.navigate("users"))
-        );
-        modelsButton.addClickListener(e ->
-                modelsButton.getUI().ifPresent(ui ->
-                        ui.navigate("models"))
-        );
-        manufacturersButton.addClickListener(e ->
-                manufacturersButton.getUI().ifPresent(ui ->
-                        ui.navigate("manufacturers"))
-        );
 
         grid.setColumns("model", "licenseNumber", "price", "carStatus");
 
+        Button addNewCar = new Button("Add new car");
         addNewCar.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setCar(new Car());
         });
-        HorizontalLayout routes = new HorizontalLayout(rentalsButton, usersButton, modelsButton, manufacturersButton);
-        HorizontalLayout toolbar = new HorizontalLayout(name, filter,priceFilter, allCars, availableCars, addNewCar);
 
+        HorizontalLayout toolbar = new HorizontalLayout(name, filter,priceFilter, allCars, availableCars, addNewCar);
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();
 
-        add(routes, toolbar, userContent);
+        add(toolbar, userContent);
         form.setCar(null);
         setSizeFull();
         refresh();
