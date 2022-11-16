@@ -16,16 +16,13 @@ import com.vaadin.flow.router.Route;
 @Route(value = "cars", layout = MainLayout.class)
 @PageTitle("Cars | Rent APP")
 public class CarsView extends VerticalLayout {
-    private CarService carService = CarService.getInstance();
-    private Grid<Car> grid = new Grid<>(Car.class);
-    private TextField name = new TextField();
-    private TextField filter = new TextField();
-    private BigDecimalField priceFilter = new BigDecimalField();
 
-    private CarsForm form = new CarsForm(this);
-    private Button addNewCar = new Button("Add new car");
-    private Button allCars = new Button("Show all cars");
-    private Button availableCars = new Button("Show available cars");
+    private final CarService carService = CarService.getInstance();
+    private final Grid<Car> grid = new Grid<>(Car.class);
+    private final TextField name = new TextField();
+    private final TextField filter = new TextField();
+    private final BigDecimalField priceFilter = new BigDecimalField();
+    private final CarsForm form = new CarsForm(this);
 
     public CarsView() {
         name.setPlaceholder("Filter by name");
@@ -43,17 +40,20 @@ public class CarsView extends VerticalLayout {
         priceFilter.setValueChangeMode(ValueChangeMode.EAGER);
         priceFilter.addValueChangeListener(e -> updateByPrice());
 
+        Button allCars = new Button("Show all cars");
         allCars.addClickListener(e -> grid.setItems(carService.getCars()));
+        Button availableCars = new Button("Show available cars");
         availableCars.addClickListener(e -> grid.setItems(carService.getAvailableCars()));
 
         grid.setColumns("model", "licenseNumber", "price", "carStatus");
 
+        Button addNewCar = new Button("Add new car");
         addNewCar.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setCar(new Car());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(name, filter,priceFilter, allCars, availableCars, addNewCar);
 
+        HorizontalLayout toolbar = new HorizontalLayout(name, filter,priceFilter, allCars, availableCars, addNewCar);
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();

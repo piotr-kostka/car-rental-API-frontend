@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 
 public class MainLayout extends AppLayout {
@@ -29,17 +28,13 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
+        RouterLink homeLink = new RouterLink("Home", HomeView.class);
         RouterLink userLink = new RouterLink("Users", UserView.class);
-        userLink.setHighlightCondition(HighlightConditions.sameLocation());
         RouterLink rentalLink = new RouterLink("Rentals", RentalView.class);
-        rentalLink.setHighlightCondition(HighlightConditions.sameLocation());
         RouterLink carLink = new RouterLink("Cars", CarsView.class);
-        carLink.setHighlightCondition(HighlightConditions.sameLocation());
         RouterLink modelLink = new RouterLink("Models", ModelView.class);
-        modelLink.setHighlightCondition(HighlightConditions.sameLocation());
         RouterLink manufacturerLink = new RouterLink("Manufacturers", ManufacturerView.class);
-        manufacturerLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        addToDrawer(new VerticalLayout(rentalLink, userLink, carLink, modelLink, manufacturerLink));
+        addToDrawer(new VerticalLayout(homeLink, rentalLink, userLink, carLink, modelLink, manufacturerLink));
     }
 }

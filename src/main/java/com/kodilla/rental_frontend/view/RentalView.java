@@ -16,13 +16,12 @@ import com.vaadin.flow.router.Route;
 @Route(value = "rentals", layout = MainLayout.class)
 @PageTitle("Rentals | Rent APP")
 public class RentalView extends VerticalLayout {
-    private RentalService rentalService = RentalService.getInstance();
-    private Grid<Rental> grid = new Grid<>(Rental.class);
-    private NumberField filter = new NumberField();
-    private TextField userFilter = new TextField();
-    private RentalForm form = new RentalForm(this);
-    private Button addNewRental = new Button("Add new rental");
-    private Button allRentals = new Button("Show all rentals");
+
+    private final RentalService rentalService = RentalService.getInstance();
+    private final Grid<Rental> grid = new Grid<>(Rental.class);
+    private final NumberField filter = new NumberField();
+    private final TextField userFilter = new TextField();
+    private final RentalForm form = new RentalForm(this);
 
     public RentalView() {
         filter.setPlaceholder("Filter by rental number");
@@ -35,16 +34,18 @@ public class RentalView extends VerticalLayout {
         userFilter.setValueChangeMode(ValueChangeMode.EAGER);
         userFilter.addValueChangeListener(e -> updateByUser());
 
+        Button allRentals = new Button("Show all rentals");
         allRentals.addClickListener(e -> refresh());
 
-        grid.setColumns("rentalId", "car", "user", "rentDate", "returnDate", "currency", "priceRate", "totalValue", "leftToPay", "rentalStatus", "paymentDate");
+        grid.setColumns("rentalId", "rentalStatus", "user", "car", "rentDate", "priceRate", "returnDate", "totalValue", "currency", "leftToPay", "paymentDate");
 
+        Button addNewRental = new Button("Add new rental");
         addNewRental.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setRental(new Rental());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(filter, userFilter, allRentals, addNewRental);
 
+        HorizontalLayout toolbar = new HorizontalLayout(filter, userFilter, allRentals, addNewRental);
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();

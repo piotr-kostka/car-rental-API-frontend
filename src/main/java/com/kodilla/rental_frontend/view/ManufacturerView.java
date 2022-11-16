@@ -16,11 +16,10 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Manufacturers | Rent APP")
 public class ManufacturerView extends VerticalLayout {
 
-    private ManufacturerService manufacturerService = ManufacturerService.getInstance();
-    private Grid<Manufacturer> grid = new Grid<>(Manufacturer.class);
-    private TextField filter = new TextField();
-    private ManufacturerForm form = new ManufacturerForm(this);
-    private Button addNewManufacturer = new Button("Add new manufacturer");
+    private final ManufacturerService manufacturerService = ManufacturerService.getInstance();
+    private final Grid<Manufacturer> grid = new Grid<>(Manufacturer.class);
+    private final TextField filter = new TextField();
+    private final ManufacturerForm form = new ManufacturerForm(this);
 
     public ManufacturerView() {
         filter.setPlaceholder("Filter by manufacturer");
@@ -30,12 +29,13 @@ public class ManufacturerView extends VerticalLayout {
 
         grid.setColumns("name");
 
+        Button addNewManufacturer = new Button("Add new manufacturer");
         addNewManufacturer.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setManufacturer(new Manufacturer());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(filter, addNewManufacturer);
 
+        HorizontalLayout toolbar = new HorizontalLayout(filter, addNewManufacturer);
         HorizontalLayout manufacturerContent = new HorizontalLayout(grid, form);
         manufacturerContent.setSizeFull();
         grid.setSizeFull();

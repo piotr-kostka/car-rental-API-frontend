@@ -18,6 +18,7 @@ import com.vaadin.flow.data.binder.Binder;
 import java.io.IOException;
 
 public class CarsForm extends FormLayout {
+
     private TextField carId = new TextField();
     private ComboBox<Model> model = new ComboBox<>("Model");
     private TextField licenseNumber = new TextField("License number");
@@ -27,9 +28,9 @@ public class CarsForm extends FormLayout {
     private Button addCar = new Button("Add car");
     private Button saveChanges = new Button("Save changes");
 
-    private Binder<Car> binder = new Binder<>(Car.class);
-    private CarsView carView;
-    private CarService carService = CarService.getInstance();
+    private final Binder<Car> binder = new Binder<>(Car.class);
+    private final CarsView carView;
+    private final CarService carService = CarService.getInstance();
 
     public CarsForm(CarsView carView) {
         ComboBox.ItemFilter<Model> filter = (model, filterString) -> (model.getName()).contains(filterString.toLowerCase());
@@ -40,9 +41,11 @@ public class CarsForm extends FormLayout {
 
         HorizontalLayout buttons = new HorizontalLayout(addCar, saveChanges);
         addCar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         add(model, licenseNumber, price, carStatus, buttons);
         binder.bindInstanceFields(this);
         this.carView = carView;
+
         addCar.addClickListener(event -> {
             try {
                 addCar();
@@ -50,6 +53,7 @@ public class CarsForm extends FormLayout {
                 e.printStackTrace();
             }
         });
+
         saveChanges.addClickListener(event -> {
             try {
                 saveChanges();
@@ -75,11 +79,6 @@ public class CarsForm extends FormLayout {
 
     public void setCar(Car car) {
         binder.setBean(car);
-
-        if (car == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
+        setVisible(car != null);
     }
 }

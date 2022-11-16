@@ -16,12 +16,11 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Users | Rent APP")
 public class UserView extends VerticalLayout {
 
-    private UserService userService = UserService.getInstance();
-    private Grid<User> grid = new Grid<>(User.class);
-    private TextField filterFirstName = new TextField();
-    private TextField filterLastName = new TextField();
-    private UserForm form = new UserForm(this);
-    private Button addNewUser = new Button("Add new user");
+    private final UserService userService = UserService.getInstance();
+    private final Grid<User> grid = new Grid<>(User.class);
+    private final TextField filterFirstName = new TextField();
+    private final TextField filterLastName = new TextField();
+    private final UserForm form = new UserForm(this);
 
     public UserView() {
         filterFirstName.setPlaceholder("Filter by Firstname");
@@ -36,12 +35,13 @@ public class UserView extends VerticalLayout {
 
         grid.setColumns("firstName", "lastName", "pesel", "address", "mail", "password", "creditCardNo", "toPay", "signupDate");
 
+        Button addNewUser = new Button("Add new user");
         addNewUser.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setUser(new User());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(filterFirstName, filterLastName, addNewUser);
 
+        HorizontalLayout toolbar = new HorizontalLayout(filterFirstName, filterLastName, addNewUser);
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();

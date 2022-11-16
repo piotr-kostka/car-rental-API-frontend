@@ -34,9 +34,9 @@ public class ModelForm extends FormLayout {
     private Button addModel = new Button("Add model");
     private Button saveChanges = new Button("Save changes");
 
-    private Binder<Model> binder = new Binder<>(Model.class);
-    private ModelView modelView;
-    private ModelService modelService = ModelService.getInstance();
+    private final Binder<Model> binder = new Binder<>(Model.class);
+    private final ModelView modelView;
+    private final ModelService modelService = ModelService.getInstance();
 
     public ModelForm(ModelView modelView) {
         ComboBox.ItemFilter<Manufacturer> filter = (manufacturer, filterString) -> (manufacturer.getName()).contains(filterString.toLowerCase());
@@ -49,9 +49,11 @@ public class ModelForm extends FormLayout {
 
         HorizontalLayout buttons = new HorizontalLayout(addModel, saveChanges);
         addModel.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         add(manufacturer, name, engineSize, bodyType, productionYear, color, seatsQuantity, doorQuantity, fuelType, transmissionType, buttons);
         binder.bindInstanceFields(this);
         this.modelView = modelView;
+
         addModel.addClickListener(event -> {
             try {
                 addModel();
@@ -59,6 +61,7 @@ public class ModelForm extends FormLayout {
                 e.printStackTrace();
             }
         });
+
         saveChanges.addClickListener(event -> {
             try {
                 saveChanges();
@@ -84,11 +87,6 @@ public class ModelForm extends FormLayout {
 
     public void setModel(Model model) {
         binder.setBean(model);
-
-        if (model == null) {
-            setVisible(false);
-        } else {
-            setVisible(true);
-        }
+        setVisible(model != null);
     }
 }

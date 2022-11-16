@@ -1,7 +1,6 @@
 package com.kodilla.rental_frontend.view;
 
 import com.kodilla.rental_frontend.domain.Model;
-import com.kodilla.rental_frontend.domain.User;
 import com.kodilla.rental_frontend.form.ModelForm;
 import com.kodilla.rental_frontend.service.ModelService;
 import com.vaadin.flow.component.button.Button;
@@ -17,11 +16,10 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Models | Rent APP")
 public class ModelView extends VerticalLayout {
 
-    private ModelService modelService = ModelService.getInstance();
-    private Grid<Model> grid = new Grid<>(Model.class);
-    private TextField filter = new TextField();
-    private ModelForm form = new ModelForm(this);
-    private Button addNewModel = new Button("Add new model");
+    private final ModelService modelService = ModelService.getInstance();
+    private final Grid<Model> grid = new Grid<>(Model.class);
+    private final TextField filter = new TextField();
+    private final ModelForm form = new ModelForm(this);
 
     public ModelView() {
         filter.setPlaceholder("Filter by model");
@@ -31,12 +29,13 @@ public class ModelView extends VerticalLayout {
 
         grid.setColumns("manufacturer", "name", "engineSize", "bodyType", "productionYear", "color", "seatsQuantity", "doorQuantity", "fuelType", "transmissionType");
 
+        Button addNewModel = new Button("Add new model");
         addNewModel.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setModel(new Model());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(filter, addNewModel);
 
+        HorizontalLayout toolbar = new HorizontalLayout(filter, addNewModel);
         HorizontalLayout userContent = new HorizontalLayout(grid, form);
         userContent.setSizeFull();
         grid.setSizeFull();
