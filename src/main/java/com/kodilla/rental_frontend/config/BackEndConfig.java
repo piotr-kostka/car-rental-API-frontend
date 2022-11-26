@@ -2,7 +2,7 @@ package com.kodilla.rental_frontend.config;
 
 public class BackEndConfig {
 
-    private static final String BACKEND_ENDPOINT = "https://rental-prod-rental-app-n61qzg.mo2.mogenius.io/";
+    private static final String BACKEND_ENDPOINT = "http://localhost:8080/v1/";
     private static final String MANUFACTURERS = "manufacturers";
     private static final String MODELS = "models";
     private static final String CARS = "cars";
